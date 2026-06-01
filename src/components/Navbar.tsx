@@ -7,6 +7,7 @@ const links = [
   { to: '/modulos', label: 'Módulos' },
   { to: '/capsulas', label: 'Cápsulas' },
   { to: '/comunidades', label: 'Comunidades' },
+  { to: '/novedades', label: 'Novedades' },
   { to: '/iniciativa', label: 'La iniciativa' },
   { to: '/ayuda', label: 'Ayuda' },
 ];

@@ -8,6 +8,9 @@ import Capsules from '@/pages/Capsules';
 import CapsuleView from '@/pages/CapsuleView';
 import Communities from '@/pages/Communities';
 import CommunityDetail from '@/pages/CommunityDetail';
+import News from '@/pages/News';
+import NewsPost from '@/pages/NewsPost';
+import Workshops from '@/pages/Workshops';
 import About from '@/pages/About';
 import Help from '@/pages/Help';
 import Transparency from '@/pages/Transparency';
@@ -25,6 +28,9 @@ export default function App() {
           <Route path="capsulas/:slug" element={<CapsuleView />} />
           <Route path="comunidades" element={<Communities />} />
           <Route path="comunidades/:slug" element={<CommunityDetail />} />
+          <Route path="novedades" element={<News />} />
+          <Route path="novedades/:slug" element={<NewsPost />} />
+          <Route path="talleres" element={<Workshops />} />
           <Route path="iniciativa" element={<About />} />
           <Route path="transparencia" element={<Transparency />} />
           <Route path="ayuda" element={<Help />} />

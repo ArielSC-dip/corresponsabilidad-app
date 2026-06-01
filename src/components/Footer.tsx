@@ -8,6 +8,8 @@ const columns = [
       { to: '/modulos', label: 'Módulos' },
       { to: '/capsulas', label: 'Cápsulas' },
       { to: '/comunidades', label: 'Comunidades temáticas' },
+      { to: '/novedades', label: 'Novedades' },
+      { to: '/talleres', label: 'Talleres y actividades' },
     ],
   },
   {

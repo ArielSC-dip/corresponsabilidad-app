@@ -14,6 +14,20 @@ export interface Module {
   capsuleIds: string[];
 }
 
+export interface MemoramaPair {
+  /** Dos textos que forman una pareja a relacionar */
+  a: string;
+  b: string;
+}
+
+/**
+ * Actividad opcional posterior al video — una por cápsula.
+ * No competitiva: sin puntaje, sin cronómetro, sin aprobado/reprobado.
+ */
+export type CapsuleActivity =
+  | { type: 'formulario'; exerciseId: string }
+  | { type: 'memorama'; intro: string; pairs: MemoramaPair[]; reflectionMessage: string };
+
 export interface Capsule {
   id: string;
   slug: string;
@@ -27,8 +41,8 @@ export interface Capsule {
   description: string;
   /** Reflexión principal que acompaña al video */
   reflection: string;
-  /** Preguntas opcionales asociadas (ids de exercises) */
-  exerciseIds: string[];
+  /** Actividad opcional asociada (formulario o memorama) */
+  activity: CapsuleActivity;
 }
 
 export interface ExerciseOption {
@@ -86,4 +100,32 @@ export interface AnonymousMetric {
   label: string;
   value: number;
   hint: string;
+}
+
+export type NewsTag = 'Novedad' | 'Reflexión' | 'Recurso' | 'Taller';
+
+/** Entrada editorial de novedades / blog */
+export interface NewsPost {
+  id: string;
+  slug: string;
+  title: string;
+  /** Fecha en formato ISO yyyy-mm-dd */
+  date: string;
+  tag: NewsTag;
+  summary: string;
+  /** Cuerpo en párrafos */
+  body: string[];
+}
+
+/** Taller o actividad (invitación, sin obligatoriedad) */
+export interface Workshop {
+  id: string;
+  title: string;
+  /** Fecha en formato ISO yyyy-mm-dd */
+  date: string;
+  modality: 'Presencial' | 'En línea';
+  place: string;
+  summary: string;
+  /** Enlace de inscripción (mock) */
+  registerUrl: string;
 }

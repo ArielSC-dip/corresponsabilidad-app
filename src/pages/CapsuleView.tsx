@@ -1,20 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Container from '@/components/Container';
 import VideoPlayer from '@/components/VideoPlayer';
 import ReflectiveExercise from '@/components/ReflectiveExercise';
+import Memorama from '@/components/Memorama';
 import CapsuleCard from '@/components/CapsuleCard';
 import Icon from '@/components/Icon';
 import NotFound from '@/pages/NotFound';
 import { getCapsuleBySlug, getCapsulesByModule } from '@/data/capsules';
 import { getModuleById } from '@/data/modules';
-import { getExercisesByIds } from '@/data/exercises';
+import { getExerciseById } from '@/data/exercises';
 import { useExploration } from '@/hooks/useExploration';
 
 export default function CapsuleView() {
   const { slug } = useParams();
   const capsule = slug ? getCapsuleBySlug(slug) : undefined;
   const { markExplored } = useExploration();
+
+  const [started, setStarted] = useState(false);
+  const [ended, setEnded] = useState(false);
+  const [activityOpen, setActivityOpen] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+  const activityRef = useRef<HTMLDivElement>(null);
 
   // Marca la cápsula como explorada (seguimiento ligero, solo local).
   useEffect(() => {
@@ -24,10 +31,26 @@ export default function CapsuleView() {
   if (!capsule) return <NotFound />;
 
   const module = getModuleById(capsule.moduleId);
-  const exercises = getExercisesByIds(capsule.exerciseIds);
   const related = module
     ? getCapsulesByModule(module.id).filter((c) => c.id !== capsule.id)
     : [];
+
+  const activity = capsule.activity;
+  const isMemorama = activity.type === 'memorama';
+  const formExercise = activity.type === 'formulario' ? getExerciseById(activity.exerciseId) : undefined;
+  const activityNoun = isMemorama ? 'un memorama' : 'una breve reflexión';
+
+  const openActivity = () => {
+    setActivityOpen(true);
+    setBannerDismissed(true);
+    window.setTimeout(
+      () => activityRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+      60,
+    );
+  };
+
+  const showStartBanner = started && !ended && !activityOpen && !bannerDismissed;
+  const showEndBanner = ended && !activityOpen && !bannerDismissed;
 
   return (
     <Container as="section" className="py-10 sm:py-12">
@@ -50,7 +73,50 @@ export default function CapsuleView() {
       <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:items-start">
         {/* Columna principal */}
         <div>
-          <VideoPlayer vimeoId={capsule.vimeoId} title={capsule.title} />
+          <VideoPlayer
+            vimeoId={capsule.vimeoId}
+            title={capsule.title}
+            onStart={() => setStarted(true)}
+            onEnded={() => setEnded(true)}
+          />
+
+          {/* Banner sutil al iniciar */}
+          {showStartBanner && (
+            <div className="mt-4 flex items-center gap-3 rounded-xl bg-ink-100/70 px-4 py-3 text-sm text-ink-600">
+              <Icon name="sparkles" className="h-4 w-4 shrink-0 text-primary-600" />
+              <span className="flex-1">Al terminar, te espera una actividad opcional.</span>
+              <button
+                type="button"
+                onClick={openActivity}
+                className="shrink-0 font-medium text-primary-700 underline-offset-2 hover:underline"
+              >
+                Verla ahora
+              </button>
+            </div>
+          )}
+
+          {/* Banner al terminar */}
+          {showEndBanner && (
+            <div className="mt-4 flex flex-col gap-3 rounded-xl bg-primary-50 p-4 ring-1 ring-primary-100 sm:flex-row sm:items-center">
+              <Icon name="sparkles" className="h-5 w-5 shrink-0 text-primary-600" />
+              <p className="flex-1 text-sm text-primary-900">
+                ¿Quieres hacer una actividad opcional sobre esta cápsula? Es {activityNoun}, sin
+                puntajes ni evaluación.
+              </p>
+              <div className="flex shrink-0 gap-2">
+                <button type="button" onClick={openActivity} className="btn-primary">
+                  Sí, ver actividad
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBannerDismissed(true)}
+                  className="btn-ghost"
+                >
+                  Ahora no
+                </button>
+              </div>
+            </div>
+          )}
 
           <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-ink-500">
             <span className="inline-flex items-center gap-1.5">
@@ -81,21 +147,39 @@ export default function CapsuleView() {
             </p>
           </div>
 
-          {/* Ejercicios reflexivos opcionales */}
-          {exercises.length > 0 && (
-            <div className="mt-10 space-y-5">
-              <h2 className="font-display text-xl font-semibold text-ink-900">
-                Para seguir pensando
-              </h2>
-              {exercises.map((exercise) => (
-                <ReflectiveExercise key={exercise.id} exercise={exercise} />
-              ))}
-            </div>
-          )}
+          {/* Actividad opcional (plegada hasta abrirla) */}
+          <div ref={activityRef} className="mt-10 scroll-mt-24">
+            <h2 className="font-display text-xl font-semibold text-ink-900">Actividad opcional</h2>
+            {!activityOpen ? (
+              <div className="card mt-4 flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm leading-relaxed text-ink-600">
+                  {isMemorama
+                    ? 'Un memorama para relacionar las ideas de la cápsula.'
+                    : 'Una breve reflexión a partir de la cápsula.'}{' '}
+                  Sin puntajes ni evaluación, solo si te apetece.
+                </p>
+                <button type="button" onClick={openActivity} className="btn-secondary shrink-0">
+                  Abrir actividad
+                </button>
+              </div>
+            ) : (
+              <div className="mt-4">
+                {isMemorama ? (
+                  <Memorama
+                    intro={activity.intro}
+                    pairs={activity.pairs}
+                    reflectionMessage={activity.reflectionMessage}
+                  />
+                ) : formExercise ? (
+                  <ReflectiveExercise exercise={formExercise} />
+                ) : null}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Columna lateral: otras cápsulas del módulo */}
-        <aside className="lg:sticky lg:top-24">
+        <aside className="lg:sticky lg:top-28">
           <h2 className="font-display text-lg font-semibold text-ink-900">
             {module ? `Más de ${module.title}` : 'Otras cápsulas'}
           </h2>

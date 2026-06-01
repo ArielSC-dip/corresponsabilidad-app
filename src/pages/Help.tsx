@@ -7,7 +7,7 @@ import Icon from '@/components/Icon';
 const faqs = [
   {
     q: '¿Necesito registrarme o crear una cuenta?',
-    a: 'No. La plataforma es completamente abierta. No pedimos registro, inicio de sesión ni datos personales de ningún tipo.',
+    a: 'La plataforma es completamente abierta. No pedimos registro, inicio de sesión ni datos personales de ningún tipo.',
   },
   {
     q: '¿Las respuestas de las reflexiones se guardan o se califican?',
@@ -15,7 +15,7 @@ const faqs = [
   },
   {
     q: '¿Hay un orden obligatorio para ver el contenido?',
-    a: 'No. Puedes empezar por cualquier módulo o cápsula, en el orden que prefieras. No hay avances que desbloquear ni nada que completar.',
+    a: 'Puedes empezar por cualquier módulo o cápsula, en el orden que prefieras. No hay avances que desbloquear ni nada que completar.',
   },
   {
     q: '¿Qué es el indicador de «cápsula explorada»?',
@@ -23,7 +23,7 @@ const faqs = [
   },
   {
     q: '¿Las comunidades temáticas son chats?',
-    a: 'No. Son espacios informativos que reúnen recursos sobre un tema. No hay mensajes, publicaciones ni interacción con otras personas.',
+    a: 'Las comunidades temáticas son espacios informativos que reúnen recursos sobre un tema. No hay mensajes, publicaciones ni interacción con otras personas.',
   },
   {
     q: '¿Recibiré notificaciones o recordatorios?',

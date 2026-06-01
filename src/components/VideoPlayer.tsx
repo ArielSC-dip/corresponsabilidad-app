@@ -1,22 +1,44 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Player from '@vimeo/player';
 import Icon from '@/components/Icon';
 
 interface VideoPlayerProps {
   vimeoId: string;
   title: string;
+  /** Se llama cuando la persona inicia la reproducción */
+  onStart?: () => void;
+  /** Se llama cuando el video termina (vía API de Vimeo) */
+  onEnded?: () => void;
 }
 
-// Reproductor con embed de Vimeo (Pro) cargado bajo demanda (click-to-play)
-// para no descargar el iframe hasta que la persona decida verlo.
-export default function VideoPlayer({ vimeoId, title }: VideoPlayerProps) {
+// Reproductor con embed de Vimeo (Pro) cargado bajo demanda (click-to-play).
+// Usa la API de Vimeo para avisar cuándo termina el video.
+export default function VideoPlayer({ vimeoId, title, onStart, onEnded }: VideoPlayerProps) {
   const [playing, setPlaying] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const src = `https://player.vimeo.com/video/${vimeoId}?title=0&byline=0&portrait=0&dnt=1`;
+
+  useEffect(() => {
+    if (!playing || !iframeRef.current) return;
+    const player = new Player(iframeRef.current);
+    const handleEnded = () => onEnded?.();
+    player.on('ended', handleEnded);
+    return () => {
+      player.off('ended', handleEnded);
+    };
+  }, [playing, onEnded]);
+
+  const handlePlay = () => {
+    setPlaying(true);
+    onStart?.();
+  };
 
   return (
     <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-ink-900 shadow-soft">
       {playing ? (
         <iframe
+          ref={iframeRef}
           src={`${src}&autoplay=1`}
           title={title}
           className="h-full w-full"
@@ -26,7 +48,7 @@ export default function VideoPlayer({ vimeoId, title }: VideoPlayerProps) {
       ) : (
         <button
           type="button"
-          onClick={() => setPlaying(true)}
+          onClick={handlePlay}
           className="group flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-primary-700 to-primary-900 text-white"
           aria-label={`Reproducir: ${title}`}
         >

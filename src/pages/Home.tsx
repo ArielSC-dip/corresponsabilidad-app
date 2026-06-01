@@ -1,11 +1,15 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Container from '@/components/Container';
 import SectionHeading from '@/components/SectionHeading';
-import ModuleCard from '@/components/ModuleCard';
-import CapsuleCard from '@/components/CapsuleCard';
+import NewsCard from '@/components/NewsCard';
+import WorkshopCard from '@/components/WorkshopCard';
 import Icon from '@/components/Icon';
-import { modules } from '@/data/modules';
-import { getRecentCapsules, getCapsuleById } from '@/data/capsules';
+import { getModuleById } from '@/data/modules';
+import { getCapsuleById } from '@/data/capsules';
+import { getRecentNews } from '@/data/news';
+import { getUpcomingWorkshops } from '@/data/workshops';
+import { getRandomReflection } from '@/data/reflections';
 import { useExploration } from '@/hooks/useExploration';
 import type { IconName } from '@/types';
 
@@ -31,6 +35,9 @@ const benefits: { icon: IconName; title: string; text: string }[] = [
     text: 'No hay respuestas correctas, ni puntuaciones, ni certificados. Solo reflexión compartida.',
   },
 ];
+
+// Módulo sugerido para "Empieza por aquí"
+const FEATURED_MODULE_ID = 'm-corresponsabilidad';
 
 function ContinueBanner() {
   const { lastCapsuleId } = useExploration();
@@ -60,7 +67,11 @@ function ContinueBanner() {
 }
 
 export default function Home() {
-  const recent = getRecentCapsules(3);
+  // Se elige una reflexión al montar la portada
+  const [reflection] = useState(getRandomReflection);
+  const recentNews = getRecentNews(3);
+  const upcomingWorkshops = getUpcomingWorkshops(2);
+  const featured = getModuleById(FEATURED_MODULE_ID);
 
   return (
     <>
@@ -117,104 +128,125 @@ export default function Home() {
 
       <ContinueBanner />
 
-      {/* Explicación institucional */}
-      <Container as="section" className="py-16">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
-          <div>
-            <SectionHeading
-              eyebrow="Sobre este espacio"
-              title="Una conversación sobre la corresponsabilidad en los cuidados"
-              description="Esta plataforma busca fomentar la reflexión sobre cómo organizamos la vida en común: las tareas domésticas, los cuidados cotidianos, el bienestar del hogar y el acompañamiento de las personas que más lo necesitan. No es una capacitación ni una evaluación: es una invitación abierta a mirar lo cotidiano con otros ojos."
-            />
-            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-              {[
-                'Organización familiar',
-                'Tareas domésticas',
-                'Cuidados cotidianos',
-                'Bienestar del hogar',
-                'Cuidado de personas dependientes',
-                'Gestión compartida de actividades',
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-2 text-sm text-ink-700">
-                  <Icon name="leaf" className="h-4 w-4 shrink-0 text-primary-500" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="card bg-primary-700 p-7 text-white">
-            <p className="font-display text-lg leading-relaxed">
-              «Reflexionar sobre nuestras actividades cotidianas puede ayudar a identificar
-              oportunidades de colaboración.»
-            </p>
-            <p className="mt-4 text-sm text-primary-100">
-              Participar es completamente voluntario. No hay seguimiento individual ni datos
-              personales de por medio.
-            </p>
-          </div>
-        </div>
-      </Container>
-
-      {/* Acceso rápido a módulos */}
-      <Container as="section" className="py-4">
-        <div className="flex items-end justify-between gap-4">
-          <SectionHeading eyebrow="Módulos" title="Temas para explorar" />
-          <Link to="/modulos" className="hidden shrink-0 text-sm font-medium text-primary-700 hover:underline sm:inline">
-            Ver todos →
-          </Link>
-        </div>
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {modules.slice(0, 6).map((module) => (
-            <ModuleCard key={module.id} module={module} />
-          ))}
-        </div>
-        <div className="mt-6 sm:hidden">
-          <Link to="/modulos" className="btn-secondary w-full">
-            Ver todos los módulos
-          </Link>
-        </div>
-      </Container>
-
-      {/* Cápsulas recientes */}
-      <Container as="section" className="py-16">
-        <div className="flex items-end justify-between gap-4">
-          <SectionHeading eyebrow="Cápsulas recientes" title="Videos breves para mirar y pensar" />
-          <Link to="/capsulas" className="hidden shrink-0 text-sm font-medium text-primary-700 hover:underline sm:inline">
-            Ver todas →
-          </Link>
-        </div>
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {recent.map((capsule) => (
-            <CapsuleCard key={capsule.id} capsule={capsule} />
-          ))}
-        </div>
-      </Container>
-
-      {/* Beneficios */}
-      <section className="bg-white py-16">
-        <Container>
-          <SectionHeading
-            align="center"
-            eyebrow="Por qué es diferente"
-            title="Una experiencia libre, cálida y sin presión"
-            description="Nos inspiramos en lo mejor del aprendizaje digital, pero dejamos fuera la competencia, las evaluaciones y la presión."
-          />
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {benefits.map((b) => (
-              <div key={b.title} className="rounded-2xl bg-ink-50 p-6">
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
-                  <Icon name={b.icon} className="h-6 w-6" />
-                </span>
-                <h3 className="mt-4 font-display text-base font-semibold text-ink-900">{b.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink-600">{b.text}</p>
+      {/* Empieza por aquí: módulo sugerido */}
+      {featured && (
+        <Container as="section" className="py-16">
+          <div className="card grid items-center gap-8 overflow-hidden p-8 sm:p-10 lg:grid-cols-[1.4fr_1fr]">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wide text-primary-600">
+                Empieza por aquí
+              </p>
+              <h2 className="mt-2 font-display text-2xl font-semibold text-ink-900 sm:text-3xl">
+                {featured.title}
+              </h2>
+              <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-600">
+                {featured.description}
+              </p>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <Link to={`/modulos/${featured.slug}`} className="btn-primary">
+                  Explorar este módulo
+                </Link>
+                <Link to="/modulos" className="btn-ghost">
+                  Ver todos los temas
+                </Link>
               </div>
-            ))}
+            </div>
+            <div className="flex justify-center">
+              <span className="inline-flex h-28 w-28 items-center justify-center rounded-3xl bg-primary-50 text-primary-600">
+                <Icon name={featured.icon} className="h-14 w-14" />
+              </span>
+            </div>
+          </div>
+        </Container>
+      )}
+
+      {/* Reflexión destacada */}
+      <section className="bg-primary-700 py-16 text-white">
+        <Container>
+          <div className="mx-auto max-w-3xl text-center">
+            <Icon name="leaf" className="mx-auto h-8 w-8 text-primary-200" />
+            <p className="mt-5 font-display text-2xl font-medium leading-relaxed sm:text-3xl">
+              «{reflection}»
+            </p>
           </div>
         </Container>
       </section>
 
-      {/* Llamado a explorar */}
+      {/* Novedades */}
       <Container as="section" className="py-16">
+        <div className="flex items-end justify-between gap-4">
+          <SectionHeading eyebrow="Novedades" title="Lo último de la iniciativa" />
+          <Link
+            to="/novedades"
+            className="hidden shrink-0 text-sm font-medium text-primary-700 hover:underline sm:inline"
+          >
+            Ver todas →
+          </Link>
+        </div>
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {recentNews.map((post) => (
+            <NewsCard key={post.id} post={post} />
+          ))}
+        </div>
+        <div className="mt-6 sm:hidden">
+          <Link to="/novedades" className="btn-secondary w-full">
+            Ver todas las novedades
+          </Link>
+        </div>
+      </Container>
+
+      {/* Talleres */}
+      <section className="bg-white py-16">
+        <Container>
+          <div className="flex items-end justify-between gap-4">
+            <SectionHeading
+              eyebrow="Talleres y actividades"
+              title="Encuentros para conversar"
+              description="Espacios voluntarios de diálogo. Participar es opcional y no requiere nada previo."
+            />
+            <Link
+              to="/talleres"
+              className="hidden shrink-0 text-sm font-medium text-primary-700 hover:underline sm:inline"
+            >
+              Ver todos →
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+            {upcomingWorkshops.map((workshop) => (
+              <WorkshopCard key={workshop.id} workshop={workshop} />
+            ))}
+          </div>
+          <div className="mt-6 sm:hidden">
+            <Link to="/talleres" className="btn-secondary w-full">
+              Ver todos los talleres
+            </Link>
+          </div>
+        </Container>
+      </section>
+
+      {/* Beneficios */}
+      <Container as="section" className="py-16">
+        <SectionHeading
+          align="center"
+          eyebrow="Por qué es diferente"
+          title="Una experiencia libre, cálida y sin presión"
+          description="Nos inspiramos en lo mejor del aprendizaje digital, pero dejamos fuera la competencia, las evaluaciones y la presión."
+        />
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {benefits.map((b) => (
+            <div key={b.title} className="rounded-2xl bg-white p-6 ring-1 ring-ink-100/60">
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
+                <Icon name={b.icon} className="h-6 w-6" />
+              </span>
+              <h3 className="mt-4 font-display text-base font-semibold text-ink-900">{b.title}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-ink-600">{b.text}</p>
+            </div>
+          ))}
+        </div>
+      </Container>
+
+      {/* Llamado a explorar */}
+      <Container as="section" className="pb-16">
         <div className="card relative overflow-hidden bg-gradient-to-br from-primary-600 to-primary-800 p-10 text-center text-white sm:p-14">
           <h2 className="font-display text-2xl font-semibold sm:text-3xl">
             Tómate un momento para explorar
@@ -224,10 +256,7 @@ export default function Home() {
             empieza a mirar.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              to="/modulos"
-              className="btn bg-white text-primary-700 hover:bg-primary-50"
-            >
+            <Link to="/modulos" className="btn bg-white text-primary-700 hover:bg-primary-50">
               Explorar contenido
             </Link>
             <Link
