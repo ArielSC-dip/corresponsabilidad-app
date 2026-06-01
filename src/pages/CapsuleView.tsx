@@ -147,33 +147,34 @@ export default function CapsuleView() {
             </p>
           </div>
 
-          {/* Actividad opcional (plegada hasta abrirla) */}
+          {/* Actividad opcional: oculta hasta que la persona quiera verla */}
           <div ref={activityRef} className="mt-10 scroll-mt-24">
-            <h2 className="font-display text-xl font-semibold text-ink-900">Actividad opcional</h2>
-            {!activityOpen ? (
-              <div className="card mt-4 flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm leading-relaxed text-ink-600">
-                  {isMemorama
-                    ? 'Un memorama para relacionar las ideas de la cápsula.'
-                    : 'Una breve reflexión a partir de la cápsula.'}{' '}
-                  Sin puntajes ni evaluación, solo si te apetece.
-                </p>
-                <button type="button" onClick={openActivity} className="btn-secondary shrink-0">
-                  Abrir actividad
-                </button>
-              </div>
+            {activityOpen ? (
+              <>
+                <h2 className="font-display text-xl font-semibold text-ink-900">
+                  Actividad opcional
+                </h2>
+                <div className="mt-4">
+                  {isMemorama ? (
+                    <Memorama
+                      intro={activity.intro}
+                      pairs={activity.pairs}
+                      reflectionMessage={activity.reflectionMessage}
+                    />
+                  ) : formExercise ? (
+                    <ReflectiveExercise exercise={formExercise} />
+                  ) : null}
+                </div>
+              </>
             ) : (
-              <div className="mt-4">
-                {isMemorama ? (
-                  <Memorama
-                    intro={activity.intro}
-                    pairs={activity.pairs}
-                    reflectionMessage={activity.reflectionMessage}
-                  />
-                ) : formExercise ? (
-                  <ReflectiveExercise exercise={formExercise} />
-                ) : null}
-              </div>
+              <button
+                type="button"
+                onClick={openActivity}
+                className="btn-ghost inline-flex items-center gap-2 text-primary-700"
+              >
+                <Icon name="sparkles" className="h-4 w-4" />
+                Hacer la actividad opcional ({isMemorama ? 'memorama' : 'reflexión'})
+              </button>
             )}
           </div>
         </div>
