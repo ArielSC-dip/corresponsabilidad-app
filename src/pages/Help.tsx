@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Container from '@/components/Container';
-import SectionHeading from '@/components/SectionHeading';
+import PageHeader from '@/components/PageHeader';
 import Icon from '@/components/Icon';
 
 const faqs = [
@@ -54,14 +54,14 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export default function Help() {
   return (
-    <Container as="section" className="py-12 sm:py-16">
-      <SectionHeading
+    <>
+      <PageHeader
         eyebrow="Ayuda"
         title="Preguntas frecuentes"
         description="Resolvemos las dudas más comunes sobre cómo funciona este espacio y cómo cuidamos tu participación."
       />
-
-      <div className="mt-8 grid gap-3 lg:max-w-3xl">
+      <Container as="section" className="py-12">
+        <div className="grid gap-3 lg:max-w-3xl">
         {faqs.map((faq) => (
           <FaqItem key={faq.q} {...faq} />
         ))}
@@ -82,7 +82,8 @@ export default function Help() {
             Datos y transparencia
           </Link>
         </div>
-      </div>
-    </Container>
+        </div>
+      </Container>
+    </>
   );
 }

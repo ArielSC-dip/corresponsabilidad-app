@@ -1,5 +1,5 @@
 import Container from '@/components/Container';
-import SectionHeading from '@/components/SectionHeading';
+import PageHeader from '@/components/PageHeader';
 import Icon from '@/components/Icon';
 import { anonymousMetrics, moduleViews, capsuleViews, formatMetric } from '@/data/metrics';
 import { getModuleById } from '@/data/modules';
@@ -22,15 +22,15 @@ export default function Transparency() {
   const maxCapsule = Math.max(...capsuleViews.map((c) => c.views));
 
   return (
-    <Container as="section" className="py-12 sm:py-16">
-      <SectionHeading
+    <>
+      <PageHeader
         eyebrow="Datos y transparencia"
         title="Cómo cuidamos tu participación"
         description="Las cifras que mostramos son agregadas, anónimas y simuladas para esta demostración. Nunca se asocian a personas: no sabemos quién eres ni guardamos datos personales."
       />
-
-      {/* Métricas agregadas anónimas */}
-      <div className="mt-10 grid gap-5 sm:grid-cols-3">
+      <Container as="section" className="py-12">
+        {/* Métricas agregadas anónimas */}
+        <div className="grid gap-5 sm:grid-cols-3">
         {anonymousMetrics.map((m) => (
           <div key={m.label} className="card p-6">
             <p className="font-display text-3xl font-semibold text-primary-700">
@@ -112,6 +112,7 @@ export default function Transparency() {
           Borrar mis datos locales
         </button>
       </div>
-    </Container>
+      </Container>
+    </>
   );
 }

@@ -6,10 +6,11 @@ import NotFound from '@/pages/NotFound';
 import { getModuleBySlug } from '@/data/modules';
 import { getCapsulesByModule } from '@/data/capsules';
 
-const accentBg: Record<string, string> = {
-  primary: 'from-primary-50 to-ink-50 text-primary-700',
-  accent: 'from-accent-50 to-ink-50 text-accent-700',
-  sand: 'from-sand-50 to-ink-50 text-sand-500',
+// El encabezado usa siempre el verde suave; el ícono conserva el color del tema.
+const accentText: Record<string, string> = {
+  primary: 'text-primary-700',
+  accent: 'text-accent-700',
+  sand: 'text-sand-500',
 };
 
 export default function ModuleDetail() {
@@ -23,7 +24,7 @@ export default function ModuleDetail() {
   return (
     <>
       {/* Encabezado del módulo */}
-      <section className={`bg-gradient-to-b ${accentBg[module.accent]}`}>
+      <section className="bg-gradient-to-b from-primary-50 to-ink-50">
         <Container className="py-12 sm:py-16">
           <nav className="mb-6 flex items-center gap-2 text-sm text-ink-500" aria-label="Migas de pan">
             <Link to="/modulos" className="hover:text-ink-700">
@@ -33,7 +34,9 @@ export default function ModuleDetail() {
             <span className="text-ink-700">{module.title}</span>
           </nav>
           <div className="flex items-start gap-4">
-            <span className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/80 shadow-sm">
+            <span
+              className={`inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-ink-100/60 ${accentText[module.accent]}`}
+            >
               <Icon name={module.icon} className="h-7 w-7" />
             </span>
             <div>
