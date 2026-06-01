@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Cámara de Diputados">
+  <!-- PLACEHOLDER institucional: reemplazar por el emblema oficial (logo-camara.png) -->
+  <circle cx="32" cy="32" r="31" fill="#175e4d" />
+  <circle cx="32" cy="32" r="31" fill="none" stroke="#0f342e" stroke-width="2" />
+  <circle cx="32" cy="29" r="16" fill="#1c2942" />
+  <!-- silueta dorada abstracta (águila estilizada) -->
+  <path d="M32 19c3.4 2.6 6.2 2.8 9 1.8-1.7 4.6-5.2 7.4-9 7.4s-7.3-2.8-9-7.4c2.8 1 5.6 .8 9-1.8z" fill="#d2944f" />
+  <path d="M24.5 31.5c2 2.6 4.6 3.8 7.5 3.8s5.5-1.2 7.5-3.8" fill="none" stroke="#d2944f" stroke-width="1.6" stroke-linecap="round" />
+  <!-- base tricolor -->
+  <rect x="15" y="47" width="11" height="4" rx="1" fill="#006847" />
+  <rect x="26.5" y="47" width="11" height="4" rx="1" fill="#ffffff" />
+  <rect x="38" y="47" width="11" height="4" rx="1" fill="#ce1126" />
+</svg>
