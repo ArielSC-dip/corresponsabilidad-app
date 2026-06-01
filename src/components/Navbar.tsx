@@ -27,6 +27,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 bg-primary-800 shadow-sm">
+      {/* Acento tricolor institucional, debajo del nav */}
       <nav className="container-content flex h-20 items-center justify-between gap-4">
         <Brand variant="light" />
 
@@ -96,6 +97,13 @@ export default function Navbar() {
           </ul>
         </div>
       )}
+
+      {/* Franja tricolor al pie del header (acompaña al nav al hacer scroll) */}
+      <div className="flex h-1.5 w-full" aria-hidden>
+        <div className="flex-1 bg-flag-green" />
+        <div className="flex-1 bg-flag-white" />
+        <div className="flex-1 bg-flag-red" />
+      </div>
     </header>
   );
 }

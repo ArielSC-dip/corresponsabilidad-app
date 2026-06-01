@@ -65,14 +65,14 @@ export default function Home() {
   return (
     <>
       {/* Hero principal */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary-100 via-primary-50 to-ink-50">
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary-50 to-ink-50">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-sand-100/60 blur-3xl"
+          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary-100/30 blur-3xl"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-accent-100/50 blur-3xl"
+          className="pointer-events-none absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-sand-100/25 blur-3xl"
         />
         <Container className="relative grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:items-center lg:py-24">
           <div>
@@ -100,12 +100,13 @@ export default function Home() {
 
           <div className="relative">
             <div className="card overflow-hidden p-2">
-              <div className="flex aspect-[4/3] flex-col items-center justify-center gap-4 rounded-xl bg-gradient-to-br from-primary-100 via-sand-100 to-accent-100 p-8 text-center">
-                <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/80 text-primary-600 shadow-sm">
+              <div className="flex aspect-[4/3] flex-col items-center justify-center gap-4 rounded-xl bg-gradient-to-br from-primary-50 via-sand-50 to-ink-50 p-8 text-center">
+                <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-primary-600 shadow-sm ring-1 ring-primary-100">
                   <Icon name="home" className="h-8 w-8" />
                 </span>
                 <p className="font-display text-xl font-medium text-ink-800">
-                  «Cada hogar encuentra formas distintas de organizarse.»
+                  «Detrás de cada hogar hay tareas, cuidados y acuerdos que hacen posible el
+                  bienestar de todos.»
                 </p>
                 <p className="text-sm text-ink-600">Una invitación a conversar, no a evaluar.</p>
               </div>

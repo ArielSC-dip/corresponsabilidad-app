@@ -7,9 +7,9 @@ import { getModuleBySlug } from '@/data/modules';
 import { getCapsulesByModule } from '@/data/capsules';
 
 const accentBg: Record<string, string> = {
-  primary: 'from-primary-100 to-primary-50 text-primary-700',
-  accent: 'from-accent-100 to-accent-50 text-accent-700',
-  sand: 'from-sand-100 to-sand-50 text-sand-500',
+  primary: 'from-primary-50 to-ink-50 text-primary-700',
+  accent: 'from-accent-50 to-ink-50 text-accent-700',
+  sand: 'from-sand-50 to-ink-50 text-sand-500',
 };
 
 export default function ModuleDetail() {

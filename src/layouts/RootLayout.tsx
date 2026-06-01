@@ -22,12 +22,6 @@ export default function RootLayout() {
         Saltar al contenido
       </a>
       <ScrollToTop />
-      {/* Acento tricolor institucional */}
-      <div className="flex h-1.5 w-full" aria-hidden>
-        <div className="flex-1 bg-flag-green" />
-        <div className="flex-1 bg-flag-white" />
-        <div className="flex-1 bg-flag-red" />
-      </div>
       <Navbar />
       <main id="contenido" className="flex-1">
         <Outlet />

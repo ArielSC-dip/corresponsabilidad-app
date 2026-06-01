@@ -24,7 +24,7 @@ export default function Footer() {
   return (
     <footer className="mt-20 bg-primary-800 text-primary-50">
       {/* Acento tricolor superior, como en la firma institucional */}
-      <div className="flex h-1 w-full" aria-hidden>
+      <div className="flex h-2.5 w-full" aria-hidden>
         <div className="flex-1 bg-flag-green" />
         <div className="flex-1 bg-flag-white" />
         <div className="flex-1 bg-flag-red" />
